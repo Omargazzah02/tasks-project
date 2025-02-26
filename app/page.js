@@ -1,95 +1,74 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client"
+import { useState, useEffect } from 'react';
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    const [tasks, setTasks] = useState([]);
+    const [newTask, setNewTask] = useState({ name: '', description: '' });
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    // Charger les tâches depuis l'API
+    useEffect(() => {
+        fetch('/api/tasks')
+            .then((res) => res.json())
+            .then((data) => setTasks(data));
+    }, []);
+
+    // Ajouter une nouvelle tâche
+    const handleAddTask = async () => {
+        const res = await fetch('/api/tasks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newTask),
+        });
+        
+        if (res.ok) {
+            const addedTask = await res.json();
+            setTasks([...tasks, addedTask]);
+            setNewTask({ name: '', description: '' });
+        }
+    };
+
+    // Supprimer une tâche
+    const handleDeleteTask = async (id) => {
+        const res = await fetch('/api/tasks', {
+          
+          
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body : JSON.stringify({id})
+
+        });
+        
+        if (res.ok) {
+            setTasks(tasks.filter((task) => task.id !== id));
+        }
+    };
+
+    return (
+        <div className="container">
+            <h1>Liste des tâches</h1>
+            <ul>
+                {tasks.map((task) => (
+                    <li key={task.id}>
+                        <h3>{task.name}</h3>
+                        <p>{task.description}</p>
+                        <button className='button-delete' onClick={() => handleDeleteTask(task.id)}>Supprimer</button>
+                    </li>
+                ))}
+            </ul>
+            <h2>Ajouter une nouvelle tâche</h2>
+            <input
+                type="text"
+                placeholder="Nom de la tâche"
+                value={newTask.name}
+                onChange={(e) => setNewTask({ ...newTask, name: e.target.value })}
             />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+            <input
+                type="text"
+                placeholder="Description"
+                value={newTask.description}
+                onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+            />
+            <button onClick={handleAddTask} className='button-normal'>Ajouter</button>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    );
 }
