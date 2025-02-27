@@ -27,6 +27,7 @@ jobs:
       - name: Mettre à jour le code avec git pull
         run: |
           ssh -i ~/.ssh/id_rsa ubuntu@13.61.183.189 "git config --global --add safe.directory /home/ubuntu/tasks-project"
+          ssh -i ~/.ssh/id_rsa ubuntu@13.61.183.189 "cd /home/ubuntu/tasks-project && git reset --hard"
           ssh -i ~/.ssh/id_rsa ubuntu@13.61.183.189 "cd /home/ubuntu/tasks-project && git pull"
 
       
