@@ -47,7 +47,7 @@ jobs:
 
       - name: Démarrer  l'application avec PM2
         run: |
-          ssh -i ~/.ssh/id_rsa ubuntu@13.61.183.189  "cd /home/ubuntu/tasks-project pm2 start npm --name 'next-app' -- run start -- --port 3000"
+          ssh -i ~/.ssh/id_rsa ubuntu@13.61.183.189  "cd /home/ubuntu/tasks-project && pm2 start npm --name 'next-app' -- run start -- --port 3000"
         
 
       - name: Vérifier l'état de l'application avec PM2
