@@ -45,7 +45,7 @@ export default function Home() {
 
     return (
         <div className="container">
-            <h1>Liste des tâches !</h1>
+            <h1>Liste des tâches 2</h1>
             <ul>
                 {tasks.map((task) => (
                     <li key={task.id}>
@@ -55,7 +55,7 @@ export default function Home() {
                     </li>
                 ))}
             </ul>
-            <h2>Ajouter une nouvelle tâche 1</h2>
+            <h2>Ajouter une nouvelle tâche</h2>
             <input
                 type="text"
                 placeholder="Nom de la tâche"
