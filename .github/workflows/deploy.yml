@@ -18,19 +18,26 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 13.61.183.189 >> ~/.ssh/known_hosts  
+          ssh-keyscan -H 13.61.183.189 >> ~/.ssh/known_hosts
+
       - name: Vérifier la connexion SSH
         run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@13.61.183.189 "echo 'Connexion SSH réussie'"
 
-      - name: Exécuter Ansible Playbook
-        uses: dawidd6/action-ansible-playbook@v2
-        with:
-          playbook: ansible/deploy.yml
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          inventory: |
-            [webserver]
-            13.61.183.189 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa
+      - name: Mettre à jour le code avec git pull
+        run: |
+          ssh -i ~/.ssh/id_rsa ubuntu@13.61.183.189 "cd /home/ubuntu/tasks-project && git pull"
 
+      
 
+      - name: Installer les dépendances
+        run: |
+          ssh -i ~/.ssh/id_rsa ubuntu@13.61.183.189 "cd /home/ubuntu/tasks-project"
 
-         
+      - name: Build du projet
+        run: |
+          ssh -i ~/.ssh/id_rsa ubuntu@13.61.183.189 "cd tasks-project && npm run build"
+
+      - name: Démarrer l'application avec PM2
+        run: |
+          ssh -i ~/.ssh/id_rsa ubuntu@13.61.183.189 "cd /home/ubuntu/tasks-project && pm2 start npm --name 'nextjs-app' -- run start"
+
