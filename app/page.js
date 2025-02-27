@@ -51,7 +51,7 @@ export default function Home() {
                     <li key={task.id}>
                         <h3>{task.name}</h3>
                         <p>{task.description}</p>
-                        <button className='button-delete' onClick={() => handleDeleteTask(task.id)}>Supprimer</button>
+                        <button className='button-delete' onClick={() => handleDeleteTask(task.id)}>Supprimer une tache </button>
                     </li>
                 ))}
             </ul>
