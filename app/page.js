@@ -47,7 +47,7 @@ export default function Home() {
         <div className="container">
             <h1>Liste des tâches 2</h1>
             <ul>
-                {tasks.map((task) => (
+                {tasks.map((task) => ( 
                     <li key={task.id}>
                         <h3>{task.name}</h3>
                         <p>{task.description}</p>
@@ -68,7 +68,7 @@ export default function Home() {
                 value={newTask.description}
                 onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
             />
-            <button onClick={handleAddTask} className='button-normal'>Ajouter</button>
+            <button onClick={handleAddTask} className='button-normal'>Ajouter </button>
         </div>
     );
 }
