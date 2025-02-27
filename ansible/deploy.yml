@@ -38,10 +38,7 @@
         name: pm2
         global: yes
 
-    - name: Vérifier si le projet est déjà cloné
-      stat:
-        path: "{{ app_path }}/.git"
-      register: git_folder
+  
 
     - name: Cloner ou mettre à jour le dépôt GitHub
       git:
@@ -49,7 +46,8 @@
         dest: "{{ app_path }}"
         version: main
         update: yes
-      when: not git_folder.stat.exists
+        force: yes
+
 
     - name: Installer les dépendances avec npm
       command: npm install
@@ -66,15 +64,18 @@
       register: pm2_status
       changed_when: false
 
-    - name: Redémarrer l'application avec PM2 si elle est en cours d'exécution
-      command: pm2 restart "{{ pm2_app_name }}"
-      when: "pm2_app_name in pm2_status.stdout"
 
     - name: Démarrer l'application avec PM2 si elle n'est pas en cours d'exécution
       command: pm2 start npm --name "{{ pm2_app_name }}" -- run start -- --port 3000
       args:
         chdir: "{{ app_path }}"
       when: "pm2_app_name not in pm2_status.stdout"
+
+    - name: Redémarrer l'application avec PM2 si elle est en cours d'exécution
+      command: pm2 restart "{{ pm2_app_name }}"
+      when: "pm2_app_name in pm2_status.stdout"
+
+    
 
     - name: Sauvegarder la configuration PM2
       command: pm2 save

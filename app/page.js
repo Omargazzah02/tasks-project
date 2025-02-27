@@ -55,7 +55,7 @@ export default function Home() {
                     </li>
                 ))}
             </ul>
-            <h2>Ajouter une nouvelle tâche</h2>
+            <h2>Ajouter une nouvelle tâche 1</h2>
             <input
                 type="text"
                 placeholder="Nom de la tâche"
