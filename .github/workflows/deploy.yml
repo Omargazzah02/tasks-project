@@ -3,7 +3,7 @@ name: Deploy Next.js App
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
@@ -18,8 +18,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 54.155.72.23 >> ~/.ssh/known_hosts  # Remplacer par ton IP
-
+          ssh-keyscan -H 54.155.72.23 >> ~/.ssh/known_hosts  
       - name: Vérifier la connexion SSH
         run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@54.155.72.23 "echo 'Connexion SSH réussie'"
 
