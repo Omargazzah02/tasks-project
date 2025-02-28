@@ -1,58 +1,95 @@
-name: Deploy Next.js App
+---
+- name: Déployer une application Next.js sur EC2 avec Ansible
+  hosts: webserver
+  become: true
 
-on:
-  push:
-    branches:
-      - main
+  vars:
+    repo_url: "https://github.com/Omargazzah02/tasks-project.git"
+    app_path: "/home/ubuntu/tasks-project"
+ 
+    pm2_app_name: "next-app"
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  tasks:
 
-    steps:
-      - name: Récupérer le code
-        uses: actions/checkout@v3
+    - name: Mettre à jour les paquets
+      apt:
+        update_cache: yes
+        upgrade: yes
 
-      - name: Ajouter la clé SSH privée et configurer SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 13.51.235.13 >> ~/.ssh/known_hosts
+    - name: Installer Node.js et npm
+      shell: |
+        curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+        apt-get install -y nodejs
+       
 
-      - name: Vérifier la connexion SSH
-        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@13.51.235.13 "echo 'Connexion SSH réussie'"
+    - name: Installer Nginx
+      apt:
+        name: nginx
+        state: present
 
-      - name: Mettre à jour le code avec git pull ou cloner
-        run: |
-          ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 << 'EOF'
-          if [ ! -d "/home/ubuntu/tasks-project/.git" ]; then
-            echo "Le projet n'existe pas, clonage..."
-            git clone git@github.com:Omargazzah02/tasks-project.git /home/ubuntu/tasks-project
-          else
-            echo "Le projet existe, mise à jour..."
-            cd /home/ubuntu/tasks-project
-            git reset --hard
-            git pull
-          fi
-          EOF
+    - name: Démarrer et activer Nginx
+      systemd:
+        name: nginx
+        state: started
+        enabled: true
 
-      - name: Installer les dépendances et build
-        run: |
-          ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 << 'EOF'
-          cd /home/ubuntu/tasks-project
-          npm install
-          npm run build
-          EOF
+    - name: Installer PM2 globalement
+      npm:
+        name: pm2
+        global: yes
 
-      - name: Démarrer  l'application avec PM2
-        run: |
-          ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 << 'EOF'
-          pm2 restart next-app || pm2 start node_modules/next/dist/bin/next --name "next-app" -- start --port 3000 
-          pm2 save
-          EOF
-        
+  
 
-      - name: Vérifier l'état de l'application avec PM2
-        run: |
-          ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 "pm2 status next-app"
+    - name: Cloner ou mettre à jour le dépôt GitHub
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ app_path }}"
+        version: main
+        update: yes
+        force: yes
+
+
+    - name: Installer les dépendances avec npm
+      command: npm install
+      args:
+        chdir: "{{ app_path }}"
+
+    - name: Build le projet Next.js
+      command: npm run build
+      args:
+        chdir: "{{ app_path }}"
+
+    - name: Vérifier si l'application est déjà en cours d'exécution avec PM2
+      command: pm2 list
+      register: pm2_status
+      changed_when: false
+
+
+    - name: Démarrer l'application avec PM2 si elle n'est pas en cours d'exécution
+      command: pm2 start npm --name "{{ pm2_app_name }}" -- run start -- --port 3000
+      args:
+        chdir: "{{ app_path }}"
+      when: "pm2_app_name not in pm2_status.stdout"
+
+    - name: Redémarrer l'application avec PM2 si elle est en cours d'exécution
+      command: pm2 restart "{{ pm2_app_name }}"
+      when: "pm2_app_name in pm2_status.stdout"
+
+    
+
+    - name: Sauvegarder la configuration PM2
+      command: pm2 save
+
+    - name: Activer PM2 au démarrage
+      command: pm2 startup systemd
+
+  handlers:
+    - name: Redémarrer Nginx
+      systemd:
+        name: nginx
+        state: restarted
+
+
+
+
+
