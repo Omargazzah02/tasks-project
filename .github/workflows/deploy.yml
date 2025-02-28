@@ -47,13 +47,12 @@ jobs:
           cd /home/ubuntu/tasks-project
           npm install
           EOF
-      
-      - name : verifier jest
-        run  : npm list jest 
 
 
       - name: Run tests
-        run: npm test
+        run: | 
+          ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 "cd /home/ubuntu/tasks-project && npm test"
+
 
       - name: build 
         run: npm run build
