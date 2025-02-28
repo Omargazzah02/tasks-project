@@ -24,9 +24,7 @@ jobs:
         run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@13.51.235.13 "echo 'Connexion SSH réussie'"
 
 
-      - name: Fix file permissions
-        run: sudo chown -R $USER:$USER /home/ubuntu/tasks-project
-
+   
       - name: Mettre à jour le code avec git pull ou cloner
         run: |
           ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 << 'EOF'
