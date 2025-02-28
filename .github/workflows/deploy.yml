@@ -48,6 +48,9 @@ jobs:
           npm install
           EOF
       
+      - name : verifier jest
+        run  : npm list jest 
+
 
       - name: Run tests
         run: npm test
