@@ -52,12 +52,12 @@ export default function Home() {
      {tasks.map((task) => ( 
          <li key={task.id}>
              <h3>{task.name}</h3>
-             <p>{task.description}</p>
+             <p>{task.descriptio}</p>
              <button className='button-delete' onClick={() => handleDeleteTask(task.id)}>Supprimer une tache  </button>
          </li>
      ))}
  </ul>
- <h2>Ajouter une nouvelle tâche</h2>
+ <h2>Ajouter une nouvelle tâche!</h2>
  <input
      type="text"
      placeholder="Nom de la tâche"
