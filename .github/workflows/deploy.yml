@@ -41,17 +41,20 @@ jobs:
 
     
 
-      - name: Installer les dépendances et build
+      - name: Installer les dépendances 
         run: |
           ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 << 'EOF'
           cd /home/ubuntu/tasks-project
           npm install
-          npm run build
           EOF
       
 
       - name: Run tests
         run: npm test
+
+      - name: build 
+        run: npm run build
+         
 
 
       - name: Démarrer  l'application avec PM2
