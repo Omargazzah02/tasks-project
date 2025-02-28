@@ -20,7 +20,8 @@
       shell: |
         curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
         apt-get install -y nodejs
-       
+
+
 
     - name: Installer Nginx
       apt:
@@ -53,6 +54,10 @@
       command: npm install
       args:
         chdir: "{{ app_path }}"
+
+
+    - name: Vérifier les tests d'intégration !
+      command : npm test
 
     - name: Build le projet Next.js
       command: npm run build

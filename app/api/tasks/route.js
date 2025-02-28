@@ -17,9 +17,12 @@ export async function POST(req) {
   return Response.json(newTask, { status: 201 });
 }
 
+
 export async function DELETE(req) {
   const { id } = await req.json();
   await prisma.task.delete({ where: { id: Number(id) } });
 
   return Response.json({ message: "Tâche supprimée" });
 }
+
+
