@@ -57,7 +57,9 @@
 
 
     - name: Vérifier les tests d'intégration !
-      command : npm test
+      shell : |
+        cd /home/ubuntu/projet-tasks
+        npm test
 
     - name: Build le projet Next.js
       command: npm run build
