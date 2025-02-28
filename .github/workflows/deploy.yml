@@ -39,8 +39,7 @@ jobs:
           fi
           EOF
 
-      - name: Run tests
-        run: npm test
+    
 
       - name: Installer les dépendances et build
         run: |
@@ -50,6 +49,9 @@ jobs:
           npm run build
           EOF
       
+
+      - name: Run tests
+        run: npm test
 
 
       - name: Démarrer  l'application avec PM2
