@@ -25,7 +25,7 @@ jobs:
 
 
       - name: Fix file permissions
-        run: sudo chown -R $USER:$USER /chemin/de/ton/projet
+        run: sudo chown -R $USER:$USER /home/ubuntu/tasks-project
 
       - name: Mettre à jour le code avec git pull ou cloner
         run: |
