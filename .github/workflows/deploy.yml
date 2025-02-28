@@ -54,13 +54,12 @@ jobs:
           ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 "cd /home/ubuntu/tasks-project && npm test"
 
 
-      - name: build 
-        run: npm run build
-         
+    
 
 
       - name: Démarrer  l'application avec PM2
         run: |
+          npm run build
           ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 << 'EOF'
           pm2 restart next-app || pm2 start node_modules/next/dist/bin/next --name "next-app" -- start --port 3000 
           pm2 save
