@@ -58,7 +58,7 @@
 
     - name: Vérifier les tests d'intégration !
       shell : |
-        cd /home/ubuntu/project-tasks
+        cd /home/ubuntu/tasks-project
         npm test
 
     - name: Build le projet Next.js
