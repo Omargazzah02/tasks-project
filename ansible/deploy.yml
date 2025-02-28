@@ -60,6 +60,8 @@
       shell : |
         cd /home/ubuntu/tasks-project
         npm test
+      register: test_result
+      failed_when: test_result.rc != 0
 
     - name: Build le projet Next.js
       command: npm run build
