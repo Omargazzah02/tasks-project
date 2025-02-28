@@ -25,7 +25,7 @@ test("GET retourne la liste des tâches", async () => {
     const result = await GET(mockRequest);
     const responseData = await result.json();
 
-    expect(result.status).toBe(205);
+    expect(result.status).toBe(201);
     expect(Array.isArray(responseData)).toBe(true);
 });
 
