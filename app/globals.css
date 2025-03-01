@@ -44,7 +44,7 @@ input {
 
 .button-normal {
   padding: 10px 20px;
-  background: #ccff00;
+  background: green;
   color: white;
   border: none;
   border-radius: 5px;
@@ -54,7 +54,7 @@ input {
 
 
 .button-normal:hover {
-  background: #b1ff5e;
+  background:  rgb(80, 243, 80);
 }
 
 .button-delete{
