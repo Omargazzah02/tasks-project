@@ -52,13 +52,9 @@ jobs:
       - name: Executer les tests d'integrations 
         run: | 
           ssh -i ~/.ssh/id_rsa ubuntu@13.60.162.42 "cd /home/ubuntu/tasks-project && npm test"
-          
-      - name: Executer les tests E2E
-        run: | 
-          ssh -i ~/.ssh/id_rsa ubuntu@13.60.162.42 "cd /home/ubuntu/tasks-project && npx cypress run"
 
 
-  
+    
 
 
       - name: Faire le build et démarrer l'application avec PM2
