@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.4.1",
+    "cypress": "^14.1.0",
     "my-app": "file:",
     "next": "15.1.7",
     "react": "^19.0.0",

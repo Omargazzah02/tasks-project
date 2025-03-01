@@ -45,6 +45,34 @@ export default function Home() {
 
     return (
        
-<div>My Home</div>
+
+ <div className="container">
+ <h1>Liste des tâches 2</h1>
+ <ul>
+     {tasks.map((task) => ( 
+         <li key={task.id}>
+             <h3>{task.name}</h3>
+             <p>{task.descriptio}</p>
+             <button className='button-delete' onClick={() => handleDeleteTask(task.id)}>Supprimer une tache  </button>
+         </li>
+     ))}
+ </ul>
+ <h2>Ajouter une nouvelle tâche!</h2>
+ <input
+     type="text"
+     name ="name"
+     placeholder="Nom de la tâche"
+     value={newTask.name}
+     onChange={(e) => setNewTask({ ...newTask, name: e.target.value })}
+ />
+ <input
+     type="text"
+     placeholder="Description"
+     name  ="description"
+     value={newTask.description}
+     onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+ />
+ <button onClick={handleAddTask} className='button-normal' type='submit'>Ajouter</button>
+</div>
     );
 }
