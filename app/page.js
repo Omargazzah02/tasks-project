@@ -47,13 +47,13 @@ export default function Home() {
        
 
  <div className="container">
- <h1>Liste des tâches 2</h1>
+ <h1>Liste des tâches</h1>
  <ul>
      {tasks.map((task) => ( 
          <li key={task.id}>
              <h3>{task.name}</h3>
              <p>{task.descriptio}</p>
-             <button className='button-delete' onClick={() => handleDeleteTask(task.id)}>Supprimer une tache  </button>
+             <button className='button-delete' onClick={() => handleDeleteTask(task.id)}>Supprimer</button>
          </li>
      ))}
  </ul>
