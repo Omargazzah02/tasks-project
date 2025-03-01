@@ -49,7 +49,7 @@ jobs:
           EOF
 
 
-      - name: Run tests
+      - name: Executer tests d'integrations 
         run: | 
           ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 "cd /home/ubuntu/tasks-project && npm test"
 
@@ -61,7 +61,7 @@ jobs:
         run: |
           npm run build
           ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 << 'EOF'
-          pm2 restart next-app || pm2 start node_modules/next/dist/bin/next --name "next-app" -- start --port 3000 
+          pm2 restart my-next-app || pm2 start npm --name "my-next-app" -- start -- -p 3000 
           pm2 save
           EOF
         
