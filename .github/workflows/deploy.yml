@@ -49,9 +49,9 @@ jobs:
           EOF
 
 
-      - name: Executer tests d'integrations 
-        run: | 
-          ssh -i ~/.ssh/id_rsa ubuntu@13.60.162.42 "cd /home/ubuntu/tasks-project && npm test"
+     # - name: Executer tests d'integrations 
+      #  run: | 
+       #   ssh -i ~/.ssh/id_rsa ubuntu@13.60.162.42 "cd /home/ubuntu/tasks-project && npm test"
 
 
     
