@@ -62,9 +62,9 @@ input {
 
 
 .button-normal:hover {
-  background: yellow;
+  background: #67b1ff;
 }
 .button-delete:hover {
-  background: #ff3232;
+  background: #3300ff;
 }
 
