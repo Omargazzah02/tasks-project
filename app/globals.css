@@ -44,11 +44,17 @@ input {
 
 .button-normal {
   padding: 10px 20px;
-  background: #007bff;
+  background: #ccff00;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+
+
+.button-normal:hover {
+  background: #b1ff5e;
 }
 
 .button-delete{
@@ -61,10 +67,7 @@ input {
 }
 
 
-.button-normal:hover {
-  background: #f6ff00;
-}
 .button-delete:hover {
-  background: #e6ff5c;
+  background: #ff3232;
 }
 
