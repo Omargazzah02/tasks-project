@@ -52,7 +52,7 @@ export default function Home() {
      {tasks.map((task) => ( 
          <li key={task.id}>
              <h3>{task.name}</h3>
-             <p>{task.descriptio}</p>
+             <p>{task.description}</p>
              <button className='button-delete' onClick={() => handleDeleteTask(task.id)}>Supprimer</button>
          </li>
      ))}
