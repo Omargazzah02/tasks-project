@@ -18,16 +18,16 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 13.51.235.13 >> ~/.ssh/known_hosts
+          ssh-keyscan -H 13.60.162.42 >> ~/.ssh/known_hosts
 
       - name: Vérifier la connexion SSH
-        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@13.51.235.13 "echo 'Connexion SSH réussie'"
+        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@13.60.162.42 "echo 'Connexion SSH réussie'"
 
 
    
       - name: Mettre à jour le code avec git pull ou cloner
         run: |
-          ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 << 'EOF'
+          ssh -i ~/.ssh/id_rsa ubuntu@13.60.162.42 << 'EOF'
           if [ ! -d "/home/ubuntu/tasks-project/.git" ]; then
             echo "Le projet n'existe pas, clonage..."
             git clone git@github.com:Omargazzah02/tasks-project.git /home/ubuntu/tasks-project
@@ -43,7 +43,7 @@ jobs:
 
       - name: Installer les dépendances 
         run: |
-          ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 << 'EOF'
+          ssh -i ~/.ssh/id_rsa ubuntu@13.60.162.42 << 'EOF'
           cd /home/ubuntu/tasks-project
           npm install
           EOF
@@ -51,7 +51,7 @@ jobs:
 
       - name: Executer tests d'integrations 
         run: | 
-          ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 "cd /home/ubuntu/tasks-project && npm test"
+          ssh -i ~/.ssh/id_rsa ubuntu@13.60.162.42 "cd /home/ubuntu/tasks-project && npm test"
 
 
     
@@ -60,7 +60,7 @@ jobs:
       - name: Démarrer  l'application avec PM2
         run: |
           npm run build
-          ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 << 'EOF'
+          ssh -i ~/.ssh/id_rsa ubuntu@13.60.162.42 << 'EOF'
           pm2 restart my-next-app || pm2 start npm --name "my-next-app" -- start -- -p 3000 
           pm2 save
           EOF
@@ -68,4 +68,4 @@ jobs:
 
       - name: Vérifier l'état de l'application avec PM2
         run: |
-          ssh -i ~/.ssh/id_rsa ubuntu@13.51.235.13 "pm2 status next-app"
+          ssh -i ~/.ssh/id_rsa ubuntu@13.60.162.42 "pm2 status next-app"
