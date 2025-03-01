@@ -72,7 +72,7 @@ export default function Home() {
      value={newTask.description}
      onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
  />
- <button onClick={handleAddTask} className='button-normal' type='submit'>Ajouterr</button>
+ <button onClick={handleAddTask} className='button-normal' type='submit'>Ajouter</button>
 </div>
     );
 }
