@@ -57,6 +57,14 @@
 
 
 
+    
+    - name: Test integrations
+      command: npm test
+      args:
+        chdir: "{{ app_path }}"
+
+
+
     - name: Build le projet Next.js
       command: npm run build
       args:
