@@ -47,7 +47,7 @@ export default function Home() {
        
 
  <div className="container">
- <h1>Liste des tâches (my last version)!</h1>
+ <h1>Liste des tâches</h1>
  <ul>
      {tasks.map((task) => ( 
          <li key={task.id}>

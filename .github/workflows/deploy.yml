@@ -75,7 +75,7 @@ jobs:
           ssh -i ~/.ssh/id_rsa ubuntu@51.21.180.205 << 'EOF'
           cd /home/ubuntu/tasks-project
           npm run build
-          pm2 restart my-next-app || pm2 start npm --name "my-next-app" -- start -- -p 3000 
+          pm2 restart next-app || pm2 start npm --name "next-app" -- run start -- --port 3000
           pm2 save
           EOF
         
