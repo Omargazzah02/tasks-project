@@ -80,11 +80,9 @@
 
     
 
-    - name: Sauvegarder la configuration PM2
-      command: pm2 save
 
-    - name: Activer PM2 au démarrage
-      command: pm2 startup systemd
+
+
 
   handlers:
     - name: Redémarrer Nginx

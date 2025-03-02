@@ -20,7 +20,7 @@ test("POST crée une nouvelle tâche", async () => {
 });
 
 test("GET retourne la liste des tâches", async () => {
-    const mockRequest = {}; 
+    const mockRequest = {};
 
     const result = await GET(mockRequest);
     const responseData = await result.json();
