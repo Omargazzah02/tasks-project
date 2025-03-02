@@ -54,12 +54,8 @@ jobs:
         run: | 
           ssh -i ~/.ssh/id_rsa ubuntu@13.61.175.136 "cd /home/ubuntu/tasks-project && npm test"
           
-      - name: Executer les tests E2E
-        run: | 
-          ssh -i ~/.ssh/id_rsa ubuntu@13.61.175.136 "cd /home/ubuntu/tasks-project && npx cypress run"
 
 
-  
 
 
       - name: Faire le build et démarrer l'application avec PM2
@@ -71,6 +67,12 @@ jobs:
           pm2 save
           EOF
         
+
+
+      - name: Executer les tests E2E
+        run: | 
+          ssh -i ~/.ssh/id_rsa ubuntu@13.61.175.136 "cd /home/ubuntu/tasks-project && npx cypress run"
+
 
       - name: Vérifier l'état de l'application avec PM2
         run: |
