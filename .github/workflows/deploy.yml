@@ -46,7 +46,7 @@ jobs:
           ssh -i ~/.ssh/id_rsa ubuntu@13.61.175.136 << 'EOF'
           cd /home/ubuntu/tasks-project
           npm install
-          npm install cypress --save-dev
+          npx cypress install
           EOF
 
 
