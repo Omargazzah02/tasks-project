@@ -57,7 +57,7 @@ export default function Home() {
          </li>
      ))}
  </ul>
- <h2>Ajouter une nouvelle tâche!</h2>
+ <h2>Ajouter une nouvelle tâche! (last version)</h2>
  <input
      type="text"
      name ="name"
