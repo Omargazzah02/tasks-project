@@ -56,7 +56,16 @@ jobs:
           ssh -i ~/.ssh/id_rsa ubuntu@51.21.180.205 "cd /home/ubuntu/tasks-project && npm test"
 
           
-
+      - name: Lancer le serveur dans le port 4000 et Executer les tests E2E 
+        run: | 
+          ssh -i ~/.ssh/id_rsa ubuntu@13.60.33.138 << 'EOF'
+          cd /home/ubuntu/tasks-project
+          npx next dev -p 4000 &
+          sleep 10  
+          npx cypress run 
+          pkill -f "next dev"   
+          EOF
+          
 
 
 
