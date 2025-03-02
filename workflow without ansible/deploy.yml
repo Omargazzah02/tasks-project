@@ -1,0 +1,82 @@
+
+name: Deploy Next.js App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v3
+
+      - name: Ajouter la clé SSH privée et configurer SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 51.21.180.205 >> ~/.ssh/known_hosts
+
+      - name: Vérifier la connexion SSH
+        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@51.21.180.205 "echo 'Connexion SSH réussie'"
+
+
+   
+      - name: Cloner le projet ou faire la mise à jour
+        run: |
+          ssh -i ~/.ssh/id_rsa ubuntu@51.21.180.205 << 'EOF'
+          if [ ! -d "/home/ubuntu/tasks-project/.git" ]; then
+            echo "Le projet n'existe pas, clonage..."
+            git clone https://github.com/Omargazzah02/tasks-project.git /home/ubuntu/tasks-project
+          else
+            echo "Le projet existe, mise à jour..."
+            cd /home/ubuntu/tasks-project
+            git reset --hard
+            git pull
+          fi
+          EOF
+
+    
+
+      - name: Installer les dépendances 
+        run: |
+          ssh -i ~/.ssh/id_rsa ubuntu@51.21.180.205 << 'EOF'
+          cd /home/ubuntu/tasks-project
+          npm install
+          npm install cypress --save-dev
+          EOF
+
+
+      - name: Executer les tests d'integrations 
+        run: | 
+          ssh -i ~/.ssh/id_rsa ubuntu@51.21.180.205 "cd /home/ubuntu/tasks-project && npm test"
+
+          
+
+
+
+
+
+      - name: Faire le build et démarrer l'application avec PM2
+        run: |
+          ssh -i ~/.ssh/id_rsa ubuntu@51.21.180.205 << 'EOF'
+          cd /home/ubuntu/tasks-project
+          npm run build
+          pm2 start npm --name "next-app" -- run start -- --port 3000 || pm2 restart next-app
+          pm2 save
+          EOF
+        
+
+
+
+
+      - name: Vérifier l'état de l'application avec PM2
+        run: |
+          ssh -i ~/.ssh/id_rsa ubuntu@51.21.180.205 "pm2 status next-app"
+
+
+
