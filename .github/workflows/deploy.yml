@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - main
-      - develop
+      
   pull_request:
     branches:
       - main
-      - develop
+      
 
 jobs:
   # =========================
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [ 20]
 
     steps:
       - uses: actions/checkout@v4
