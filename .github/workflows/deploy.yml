@@ -1,83 +1,60 @@
-name: Deploy Next.js App
+name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  deploy:
+  # Job principal avec matrice Node.js
+  build-and-test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20] # Matrice Node.js pour tester plusieurs versions
+    concurrency:
+      group: "ci-${{ github.ref }}" # Evite de lancer plusieurs CI sur la même branche
+      cancel-in-progress: true
 
     steps:
-      - name: Récupérer le code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Ajouter la clé SSH privée et configurer SSH
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 51.21.180.205 >> ~/.ssh/known_hosts  
-      - name: Vérifier la connexion SSH
-        run: ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@51.21.180.205 "echo 'Connexion SSH réussie'"
-
-      - name: Exécuter Ansible Playbook
-        uses: dawidd6/action-ansible-playbook@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          playbook: ansible/deploy.yml
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          inventory: |
-            [webserver]
-            51.21.180.205 ansible_user=ubuntu ansible_ssh_private_key_file=~/.ssh/id_rsa
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
+      - name: Install dependencies
+        run: npm ci
 
+      # Lint
+      - name: Run ESLint
+        run: npm run lint
 
-         
+      # Tests unitaires
+      - name: Run unit tests
+        run: npm test
+        env:
+          NODE_ENV: test
 
+      # Tests API (si tu as un serveur mock ou test)
+      - name: Run API tests
+        run: npm run test:api
+        env:
+          NODE_ENV: test
 
+      # Build
+      - name: Build project
+        run: npm run build
 
+      # Upload artefacts
+      - name: Upload build artefacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: .next
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      # Cache node_modules (déjà géré par setup-node cache)
